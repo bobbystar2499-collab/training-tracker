@@ -1,0 +1,15 @@
+{
+    "name":"Ironman Ledger",
+    "short_name": "Ledger",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#14201C",
+    "theme color": "#14201C",
+    "icons":[
+{
+    "src": "icon.png",
+    "sizes": "512x512",
+    "type": "image/png"
+}
+    ]
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 20px;
+            padding: 20px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 40px;
+            text-align: center;
+        }
+        button, select, input {
+            font-size: 20 px;
+            padding: 14px;
+            width: 100%;
+            margin-top: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+    <head>
+        <meta charset="UTF-8">
+        <title> Ironman Ledger</title>
+        <link rel="manifest" href="manifest.json">
+        <meta name="theme-color" content="#14201C">
+    </head>
+    <body>
+        <h1>Iron Ledger</h1>
+        <div id="stats"></div>
+        <button id="openFormBtn">Log Workout</button>
+        <div id="formBox" style="display:none;">
+            <select id="disciplineInput">
+                <option value="bike">Bike</option>
+                <option value="run">Run</option>
+                <option value="swim">Swim</option>
+            </select>
+            <input type="number" id="distanceInput" placeholder="Distance (mi)">
+            <button id="saveBtn">Save</button>
+        </div>
+        <div id="workoutList"></div>  
+        <script>
+            let workouts=[];
+
+            function render() {
+                document.getElementById("stats").innerText= 
+                "Total workouts logged: " + workouts.length;
+
+                const list = document.getElementById("workoutList");
+                list.innerHTML ="";
+                workouts.forEach(function(w){
+                    const item = document.createElement("p");
+                    item.innerText =w.discipline + ":" + w.distance + "mi";
+                    list.appendChild(item);
+                });
+            }
+
+           document.getElementById("openFormBtn").addEventListener("click", function(){
+            document.getElementById("formBox").style.display = "block";
+           });
+
+           document.getElementById("saveBtn").addEventListener("click", function(){
+            const discipline = document.getElementById("disciplineInput").value;
+            const distance = document.getElementById("distanceInput").value;
+            workouts.push({ discipline: discipline, distance: distance});
+            document.getElementById("formBox").style.display = "none";
+            document.getElementById("distanceInput").value = "";
+            render();
+           });
+
+            render();
+        </script>      
+    </body>
+</html>
