@@ -20,6 +20,16 @@
             color: #c9a98f;
             margin-bottom: 12px;
         }
+        h2{
+            font-size: 26px;
+            color: #f4a15e;
+            margin-top: 24px;
+        }
+        #iceStats {
+            text-align: center;
+            color: #c9a98f;
+            margin-bottom: 12px;
+        }
         button, select, input {
             font-size: 18 px;
             padding: 12px;
@@ -31,7 +41,7 @@
             background: #2a211c;
             color: #f2e8dd;
         }
-        #openFormBtn, #saveBtn {
+        #openFormBtn, #saveBtn, #openIceBtn, #iceSaveBtn {
             background: #f4a15e;
             color: #1a1512;
             font-weight: bold;
@@ -65,8 +75,17 @@
             <button id="saveBtn">Save</button>
         </div>
         <div id="workoutList"></div>  
+        <h2>Ice Baths</h2>
+        <div id="iceStats"></div>
+        <button id="openIceBtn">Log Ice Bath</button>
+        <div id="iceFormBox" style="display:none;">
+        <input type="number" id="iceDurationInput" placeholder="Duration (min)">
+        <input type="number" id="iceTempInput" placeholder="Water temp (F)">
+        <button id="iceSaveBtn">Save</button>
+    </div>
+    <div id="iceList"></div>
         <script>
-            let workouts=[];
+            let workouts= JSON.parse(localStorage.getItem("workouts")) || []
 
             function render() {
                 document.getElementById("stats").innerText= 
@@ -89,12 +108,44 @@
             const discipline = document.getElementById("disciplineInput").value;
             const distance = document.getElementById("distanceInput").value;
             workouts.push({ discipline: discipline, distance: distance});
+            localStorage.setItem("workouts", JSON.stringify(workouts))
             document.getElementById("formBox").style.display = "none";
             document.getElementById("distanceInput").value = "";
-            render();
            });
 
+            let iceBaths = JSON.parse(localStorage.getItem("iceBaths")) || []
+
+            function renderIce() {
+                document.getElementById("iceStats").innerText=
+                "Total ice baths logged" + iceBaths.length;
+
+                const list  = document.getElementById("iceList");
+                list.innerHTML ="";
+                iceBaths.forEach(function(ib) {
+                    const item = document.createElement("p")
+                    item.innerText = ib.date + "--" + ib.duration + " min, " + ib.temp + "F";
+                    list.appendChild(item);
+                });
+            }
+
+            document.getElementById("openIceBtn").addEventListener("click", function(){
+                document.getElementById("iceFormBox").style.display = "block";
+            });
+
+            document.getElementById("iceSaveBtn").addEventListener("click", function(){
+                const duration = document.getElementById("iceDurationInput").value;
+                const temp = document.getElementById("iceTempInput").value;
+                const today = new Date().toDateString();
+                iceBaths.push({ duration:duration, temp: temp, date: today });
+                localStorage.setItem("iceBaths", JSON.stringify(iceBaths))
+                document.getElementById("iceFormBox").style.display = "none";
+                document.getElementById("iceDurationInput").value = "";
+                document.getElementById("iceTempInput").value = "";
+                renderIce();
+            });
+
             render();
+            renderIce();
         </script>      
     </body>
 </html>
