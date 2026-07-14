@@ -77,6 +77,7 @@
         <div id="workoutList"></div>  
         <h2>Ice Baths</h2>
         <div id="iceStats"></div>
+        <div id="iceStreaks"></div>
         <button id="openIceBtn">Log Ice Bath</button>
         <div id="iceFormBox" style="display:none;">
         <input type="number" id="iceDurationInput" placeholder="Duration (min)">
@@ -89,7 +90,7 @@
 
             function render() {
                 document.getElementById("stats").innerText= 
-                "Total workouts logged: " + workouts.length;
+                "Total Workouts Logged: " + workouts.length;
 
                 const list = document.getElementById("workoutList");
                 list.innerHTML ="";
@@ -117,7 +118,24 @@
 
             function renderIce() {
                 document.getElementById("iceStats").innerText=
-                "Total ice baths logged" + iceBaths.length;
+                "Total Ice Baths Logged: " + iceBaths.length;
+
+                let streak = 0;
+                let checkDate = new Date();
+                while(true){
+                    const dateStr = checkDate.toDateString();
+                    const hasEntry = iceBaths.some(function(ib) {
+                        return ib.date === dateStr;
+                    });
+                    if(hasEntry) {
+                        streak++;
+                        checkDate.setDate(checkDate.getDate() - 1);
+                    } else {
+                        break;
+                    }
+                }
+                document.getElementById("iceStreaks").innerText = "Current streak: " + streak + " days ";
+
 
                 const list  = document.getElementById("iceList");
                 list.innerHTML ="";
